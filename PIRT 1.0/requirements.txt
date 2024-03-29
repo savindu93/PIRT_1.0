@@ -1,0 +1,7 @@
+streamlit
+Bio
+re
+os
+zipfile
+base64
+pandas
