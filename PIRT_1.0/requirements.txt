@@ -1,7 +1,4 @@
 streamlit==1.32.2
 biopython==1.83
-os
-zipfile
-base64
 pandas==2.1.4
 beautifulsoup4==4.12.3
