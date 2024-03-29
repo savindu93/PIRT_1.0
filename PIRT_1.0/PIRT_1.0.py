@@ -33,7 +33,14 @@ with col[0]:
     """)
 
 with col[1]:
-    st.image('protein-illustration-1TOX.jpeg')
+    
+    im = cv2.imread('protein-illustration-1TOX.jpeg')
+    im_resize = cv2.resize(im, (500, 500))
+
+    is_success, im_buf_arr = cv2.imencode(".jpeg", im_resize)
+    byte_im = im_buf_arr.tobytes()
+    st.image(byte_im)
+    #st.image('protein-illustration-1TOX.jpeg')
 
 tab1, tab2, tab3 = st.tabs(['Retrieve from Swiss-Prot',
                             'Retrieve from Prosite',
