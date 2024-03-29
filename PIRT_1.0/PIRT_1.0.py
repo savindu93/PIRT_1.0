@@ -1,5 +1,6 @@
 from PRAT.Protein_Analyzer import PRAT
 import streamlit as st
+import cv2
 
 
 with st.sidebar:
