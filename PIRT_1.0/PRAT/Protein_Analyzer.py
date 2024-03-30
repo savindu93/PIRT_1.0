@@ -27,6 +27,7 @@ class PRAT:
         protein_data = []
 
         for ID in IDs:
+            st.write(ID)
             handle = ExPASy.get_sprot_raw(ID)
             protein_data.append(SwissProt.parse(handle))
 
