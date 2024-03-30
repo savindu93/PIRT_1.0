@@ -86,17 +86,18 @@ with tab2:
     - **A short description of the domain**\n
     
     The proteins can be specified using their UniProt IDs in a text file or sequences in a fasta
-    file or can be typed in the given textarea.
+    file or can be typed in the given text area.
     
     {"****"}
     
     ''')
 
-    file = st.file_uploader("**Upload a text or fasta file of the protein**",
+    file = st.file_uploader("**Upload a text file containing multiple protein IDs"\ 
+                            "or fasta file with the protein sequence**",
                                 type = ["txt","fasta"])
 
     user_input = st.text_area("**Enter protein ID or Sequence** "
-                              "(When entering multiple IDs enter each new ID in a newline or multiple"
+                              "(When entering multiple IDs enter each new ID in a newline or multiple "
                               "sequences enter each new sequence leaving a blank new line)", "", height = 200)
 
     if file and st.button('Retrieve Data', key='retrieve_pro_records_f') :
