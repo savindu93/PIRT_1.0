@@ -50,7 +50,7 @@ class PRAT:
 
             return zip_file_path
         
-        except Excpetion as e:
+        except Exception as e:
             st.error(f"An error occurred: {e.message} \n"\
             "Recheck your input IDs in the text file and\n"\
             "retry.")
