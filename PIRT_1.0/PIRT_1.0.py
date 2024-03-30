@@ -228,14 +228,12 @@ with tab3:
     if file and st.button('Retrieve Data', key='retrieve_atom_hetero_info'):
 
         with st.spinner(text = "Retrieving Data"):
-            filepath = PRAT.pdb_atom_extractor(file.name)
-            filepath_1 = PRAT.pdb_hetero_extractor(file.name)
+            filepath = PRAT.pdb_atom_extractor(file)
+            filepath_1 = PRAT.pdb_hetero_extractor(file)
 
-            st.write("Atomic Info:")
-            st.markdown(PRAT.file_downloader(filepath), unsafe_allow_html = True)
 
-            st.write("Hetero-residue Info:")
-            st.markdown(PRAT.file_downloader(filepath_1), unsafe_allow_html = True)
+            st.markdown(f"Atomic Info: {PRAT.file_downloader(filepath)}", unsafe_allow_html = True)
+            st.markdown(f"Hetero-residue Info: {PRAT.file_downloader(filepath_1)}", unsafe_allow_html = True)
 
 
 

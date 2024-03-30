@@ -571,7 +571,7 @@ class PRAT:
             # If the protein structure has been determined using any of the 3 exp methods given below then such 
             # records will have more than one model for a particular protein chain. By setting model as true
             # only one record out of the multiple models will be printed out.
-            
+
             if any(method in exp_method for method in ["solution scattering","infrared spectroscopy","solution nmr"]) :
 
                 models = [value for value in struct.get_models()]
@@ -608,19 +608,20 @@ class PRAT:
         return zip_file_path
 
     # Method to extract the atomic coordinates of each residue of a given protein in PDB file format
-    def pdb_atom_extractor(filename):
+    def pdb_atom_extractor(file):
+
+        stringio_file = StringIO(file.getvalue().decode("utf-8"))
 
         ex = r'pdb(\w{4}).ent'
         pattern = re.compile(ex)
 
-        pdb_id = re.findall(pattern, filename)[0]
-        print(pdb_id)
+        pdb_id = re.findall(pattern, file.name)[0]
 
         # Variable to store the information on the atoms and their coordinates
         atom_coords = []
 
 
-        with open(filename, 'r') as file:
+        with open(stringio_file, 'r') as file:
 
             for line in file:
 
@@ -669,19 +670,22 @@ class PRAT:
 
 
     # Method to extract the hetero residues of a given protein
-    def pdb_hetero_extractor(filename):
+    def pdb_hetero_extractor(file):
+        
+        stringio_file = StringIO(file.getvalue().decode("utf-8"))
+
 
         ex = r'pdb(\w{4}).ent'
         pattern = re.compile(ex)
 
-        pdb_id = re.findall(pattern, filename)[0]
+        pdb_id = re.findall(pattern, file.name)[0]
         print(pdb_id)
 
         # Variable to store the information on the hetero-residues
         hetero_residue = []
         het_info = []
 
-        with open(filename, 'r') as file:
+        with open(stringio_file, 'r') as file:
 
             for line in file:
 
