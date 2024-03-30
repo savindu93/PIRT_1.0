@@ -19,7 +19,7 @@ class PRAT:
 
     def retrieve_SP_records(file):
 
-        IDs = file.read().decode("utf-8")
+        IDs = file.read()
         protein_data = []
 
         for ID in IDs:
