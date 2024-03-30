@@ -21,7 +21,7 @@ class PRAT:
 
     def retrieve_SP_records(file):
 
-        IDs = file.getvalue().decode("utf-8").split(" ")
+        IDs = file.getvalue().decode("utf-8").split("\n")
         st.write(IDs)
         #IDs = stringio.read()
         protein_data = []
