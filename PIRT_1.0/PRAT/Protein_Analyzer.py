@@ -622,9 +622,12 @@ class PRAT:
 
 
         pdb_file = stringio_file.read()
+        st.write(pdb_file)
 
 
         for line in pdb_file:
+
+            st.write(line)
 
             if line.startswith('ATOM'):
 
