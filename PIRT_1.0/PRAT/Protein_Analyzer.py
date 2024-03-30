@@ -408,15 +408,25 @@ class PRAT:
         parser = PDBParser(PERMISSIVE = 1)
         struct = parser.get_structure(pdb_id, stringio_file)
 
+        no_models = len([model for model in struct.get_models()])
+
         chains = [value for value in struct.get_chains()]
 
         print(f"Number of chains: {len(chains)}\n")
 
         # Variable that includes all the data that will be printed out
         # to the external text file
-        data = f"Protein's Chain Information\n" \
-               f"Protein : {pdb_id}\n\n"\
-               f"Number of chains: {len(chains)}\n\n"
+
+        if no_models > 1:
+
+            data = f"Protein's Chain Information\n" \
+                    f"Protein : {pdb_id}\n\n"\
+                    f"Number of models: {no_models}\n\n"
+        else:
+
+            data = f"Protein's Chain Information\n" \
+                    f"Protein : {pdb_id}\n\n"\
+                    f"Number of chains: {len(chains)}\n\n"
 
         # Extract the information related all the protein chains
         for chain in chains:
@@ -441,14 +451,13 @@ class PRAT:
             print(f"Number of atoms: {no_atoms}")
 
             df = pd.DataFrame(atoms, columns = ['Residue','Atoms'])
-            print(df)
 
             # Add the information to the data variable that will be printed out
             # to the text file
             data += f"Chain: {chain.get_id()}\n" \
                     f"Number of residues: {len(residues)}\n" \
                     f"Number of atoms: {no_atoms}\n\n" \
-                    f"{df}\n\n"
+                    f"{df.to_string()}\n\n"
 
 
         # Write the chain info into an output text file
@@ -527,7 +536,7 @@ class PRAT:
         IDs = file.getvalue().decode("utf-8").split("\n")
 
         for ID in IDs:
-            
+
             st.write(ID)
             pdb_id = ID.strip()
 
