@@ -302,7 +302,6 @@ class PRAT:
         for ID in IDs:
 
             pdb_id = ID.strip()
-            st.write(pdb_id)
 
             # Download and Read the PDB file
             from Bio.PDB.PDBList import PDBList
@@ -315,15 +314,19 @@ class PRAT:
             parser = PDBParser(PERMISSIVE = 1)
             struct = parser.get_structure(pdb_id, protein_file)
 
+            models = [model for model in struct.get_models()]
+
+
             # Extract the residues for the protein
-            seq_res = [res.resname for res in struct.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]]
+            seq_res = [res.resname for res in struct.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]\
+                        and struct.get_models() == models[0]] # Only amino acid residues of the 1st model are included, hetero residues are removed 
+            
             seq += f'\n>{struct.get_full_id()[0]}\n'
 
             for res in seq_res:
 
                 seq += [aa for aat,aa in amino_acid_dict.items() if aat.lower() == res.lower()][0]
 
-            #print(seq)
             seq += '\n'
 
             # Extract residues for each chain in the protein
@@ -389,19 +392,21 @@ class PRAT:
     # Method to output the no.of chains, and atoms
     # for each residue of a protein given in a single pdb file
 
-    def pdb_chain_extractor_single(filename):
+    def pdb_chain_extractor_single(file):
+
+        stringio_file = StringIO(file.getvalue().decode("utf-8"))
 
 
         ex = r'pdb(\w{4}).ent'
         pattern = re.compile(ex)
 
-        pdb_id = re.findall(pattern, filename)[0]
+        pdb_id = re.findall(pattern, file.name)[0]
         print(pdb_id)
 
         # Read the PDB file
         from Bio.PDB.PDBParser import PDBParser
         parser = PDBParser(PERMISSIVE = 1)
-        struct = parser.get_structure(pdb_id, filename)
+        struct = parser.get_structure(pdb_id, stringio_file)
 
         chains = [value for value in struct.get_chains()]
 
@@ -511,7 +516,7 @@ class PRAT:
 
         return data
 
-    def pdb_chain_extractor_multi(filename):
+    def pdb_chain_extractor_multi(file):
 
 
         filenames = []
@@ -519,54 +524,55 @@ class PRAT:
 
         chain_data = {}
 
-        with open(filename, 'r') as handle:
+        IDs = file.getvalue().decode("utf-8").split("\n")
 
-            for line in handle:
-                print(line)
-                pdb_id = line.strip("\n")
+        for ID in IDs:
+            
+            st.write(ID)
+            pdb_id = ID.strip()
 
-                # Download and Read the PDB file
-                from Bio.PDB.PDBList import PDBList
-                pl = PDBList()
-                protein_file = pl.retrieve_pdb_file(pdb_code = pdb_id, file_format = 'pdb')
+            # Download and Read the PDB file
+            from Bio.PDB.PDBList import PDBList
+            pl = PDBList()
+            protein_file = pl.retrieve_pdb_file(pdb_code = pdb_id, file_format = 'pdb')
 
-                from Bio.PDB.PDBParser import PDBParser
-                parser = PDBParser(PERMISSIVE = 1)
-                struct = parser.get_structure(pdb_id, protein_file)
+            from Bio.PDB.PDBParser import PDBParser
+            parser = PDBParser(PERMISSIVE = 1)
+            struct = parser.get_structure(pdb_id, protein_file)
 
-                exp_method = struct.header['structure_method'].split(';')
+            exp_method = struct.header['structure_method'].split(';')
 
-                # Variable that includes all the data that will be printed out
-                # to the external text file
-                data = f"Protein information\n" \
-                       f"Protein : {pdb_id}\n" \
-                       f"Experimental Method: {exp_method[0]}\n\n"
+            # Variable that includes all the data that will be printed out
+            # to the external text file
+            data = f"Protein information\n" \
+                    f"Protein : {pdb_id}\n" \
+                    f"Experimental Method: {exp_method[0]}\n\n"
 
-                chains = [value for value in struct.get_chains()]
+            chains = [value for value in struct.get_chains()]
 
-                if any(method in exp_method for method in ["solution scattering","infrared spectroscopy","solution nmr"]) :
+            if any(method in exp_method for method in ["solution scattering","infrared spectroscopy","solution nmr"]) :
 
-                    models = [value for value in struct.get_models()]
-                    data += f"Number of models: {len(models)}\n\n"
+                models = [value for value in struct.get_models()]
+                data += f"Number of models: {len(models)}\n\n"
 
-                    model = True
+                model = True
 
-                    data += PRAT.extract_chain_info(chains,model)
+                data += PRAT.extract_chain_info(chains,model)
 
-                else:
+            else:
 
-                    data += f"Number of chains: {len(chains)}\n\n"
+                data += f"Number of chains: {len(chains)}\n\n"
 
-                    model = False
-                    data += PRAT.extract_chain_info(chains,model)
+                model = False
+                data += PRAT.extract_chain_info(chains,model)
 
-                chain_data[f'{pdb_id}'] = data
+            chain_data[f'{pdb_id}'] = data
 
-                # Write the chain info into an output text file
-                with open(f"{pdb_id}_Chain_info.txt", 'w') as file:
+            # Write the chain info into an output text file
+            with open(f"{pdb_id}_Chain_info.txt", 'w') as file:
 
-                    file.write(data)
-                    filenames.append(f"{pdb_id}_Chain_info.txt")
+                file.write(data)
+                filenames.append(f"{pdb_id}_Chain_info.txt")
 
         # Create filepaths for the above newly formed files
         for filename in filenames:

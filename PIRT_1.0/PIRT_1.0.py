@@ -191,13 +191,13 @@ with tab3:
 
         if '.ent' in file.name:
             with st.spinner(text = "Retrieving Data"):
-                filepath = PRAT.pdb_chain_extractor_single(file.name)
+                filepath = PRAT.pdb_chain_extractor_single(file)
 
                 st.markdown(PRAT.file_downloader(filepath), unsafe_allow_html = True)
 
         elif '.txt' in file.name:
             with st.spinner(text="Retrieving Data"):
-                zip_file_path = PRAT.pdb_chain_extractor_multi(file.name)
+                zip_file_path = PRAT.pdb_chain_extractor_multi(file)
 
                 st.markdown(PRAT.file_downloader(zip_file_path), unsafe_allow_html=True)
 
