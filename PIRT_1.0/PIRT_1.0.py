@@ -234,7 +234,7 @@ with tab3:
             st.markdown(f"Atomic Info: {PRAT.file_downloader(filepath)}", unsafe_allow_html = True)
 
 
-            if !os.path.exists(data):
+            if not os.path.exists(data):
                 
                 st.markdown(f":red[{data}]")
 
