@@ -22,35 +22,38 @@ class PRAT:
 
     def retrieve_SP_records(file):
 
-        IDs = file.getvalue().decode("utf-8").split("\n")
-        st.write(IDs)
-        #IDs = stringio.read()
-        protein_data = []
+        try:
+            IDs = file.getvalue().decode("utf-8").split("\n")
+            protein_data = []
 
-        for ID in IDs:
-            st.write(ID)
-            handle = ExPASy.get_sprot_raw(ID.strip())
-            protein_data.append(SwissProt.parse(handle))
+            for ID in IDs:
+                handle = ExPASy.get_sprot_raw(ID.strip())
+                protein_data.append(SwissProt.parse(handle))
 
-        filenames = []
+            filenames = []
 
-        for records in protein_data:
-            for record in records:
-                file_name = f'{record.accessions[0]}.fasta'
-                filenames.append(file_name)
-                organism = f"{record.organism.split(' ')[0]}_{record.organism.split(' ')[1]}"
-                with open(file_name,'w') as file:
-                    file.write(f">{record.accessions[0]} {record.entry_name} {organism}\n"
-                               f"{record.sequence}\n")
+            for records in protein_data:
+                for record in records:
+                    file_name = f'{record.accessions[0]}.fasta'
+                    filenames.append(file_name)
+                    organism = f"{record.organism.split(' ')[0]}_{record.organism.split(' ')[1]}"
+                    with open(file_name,'w') as file:
+                        file.write(f">{record.accessions[0]} {record.entry_name} {organism}\n"
+                                f"{record.sequence}\n")
 
-        filepaths = [os.path.abspath(filename) for filename in filenames]
+            filepaths = [os.path.abspath(filename) for filename in filenames]
 
-        zip_file_path = "fasta_files.zip"
-        with zipfile.ZipFile(zip_file_path, "w") as zipf:
-            for filepath in filepaths:
-                zipf.write(filepath, os.path.basename(filepath))
+            zip_file_path = "fasta_files.zip"
+            with zipfile.ZipFile(zip_file_path, "w") as zipf:
+                for filepath in filepaths:
+                    zipf.write(filepath, os.path.basename(filepath))
 
-        return zip_file_path
+            return zip_file_path
+        
+        except Excpetion as e:
+            st.error(f"An error occurred: {e.message} \n"\
+            "Recheck your input IDs in the text file and\n"\
+            "retry.")
 
     def file_downloader(filepath):
 
