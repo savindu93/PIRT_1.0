@@ -730,7 +730,7 @@ class PRAT:
         df = df.to_string()
         df_1 = df_1.to_string()
 
-        if len(df) == 0:
+        if df.empty():
 
             error = "No hetero-residues were found for the specified protein"
 
