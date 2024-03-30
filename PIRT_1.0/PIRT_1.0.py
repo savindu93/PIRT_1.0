@@ -236,7 +236,7 @@ with tab3:
 
             if data != "":
                 
-                st.error(data)
+                st.markdown(data)
 
             else:
             
