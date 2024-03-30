@@ -717,6 +717,7 @@ class PRAT:
                 else:
                     het_info.append(hetnam)
 
+
         hetero_residue_columns = ['Het ID', 'Chain ID', 'Sequence No.', 'No. of Hetero Residues']
         het_info_columns = ['Het ID', 'Het Name']
 
@@ -729,25 +730,30 @@ class PRAT:
         df = df.to_string()
         df_1 = df_1.to_string()
 
+        if df.empty:
 
-        with open(f'{pdb_id}_hetero_info.txt', 'w') as file:
+            error = "No hetero-residues were found for the specifiec protein"
 
-            data = f"Hetero-Residue Information\n" \
-                   f"Protein: {pdb_id}\n\n" \
-                   f"The following file gives information on the hetero-residues of the protein of interest. Information \n" \
-                   f"such as the name, number of each hetero residue, the chain and the location of it in the sequence are \n" \
-                   f"given.\n\n" \
-                   f"{df}\n\n" \
-                   f"{df_1}"
+        else:
 
-            file.write(data)
-            file_name = f'{pdb_id}_hetero_info.txt'
+            with open(f'{pdb_id}_hetero_info.txt', 'w') as file:
+
+                data = f"Hetero-Residue Information\n" \
+                    f"Protein: {pdb_id}\n\n" \
+                    f"The following file gives information on the hetero-residues of the protein of interest. Information \n" \
+                    f"such as the name, number of each hetero residue, the chain and the location of it in the sequence are \n" \
+                    f"given.\n\n" \
+                    f"{df}\n\n" \
+                    f"{df_1}"
+
+                file.write(data)
+                file_name = f'{pdb_id}_hetero_info.txt'
 
 
-            # Create filepath for the above newly formed file
-            filepath = os.path.abspath(file_name)
+                # Create filepath for the above newly formed file
+                filepath = os.path.abspath(file_name)
 
-        return filepath
+        return filepath, error
 
 
 
