@@ -106,7 +106,7 @@ with tab2:
             #zip_file_path = PRAT.retrieve_SP_records(file.name)
             #status.update(label = "Retrieved Successfully", state = "complete")
 
-            domains, zip_file_path = PRAT.retrieve_domain_info_f(file.name)
+            domains, zip_file_path = PRAT.retrieve_domain_info_f(file)
             st.markdown(PRAT.file_downloader(zip_file_path), unsafe_allow_html=True)
 
             for protein, domain_info in domains.items():
