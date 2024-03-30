@@ -696,7 +696,7 @@ class PRAT:
 
             elif line.split(" ")[0] == 'HETNAM':
 
-                hetnam = line.strip().split(" ")[1:]
+                hetnam = line.strip().split()[1:]
 
 
                 if len(hetnam) > 2:
