@@ -51,7 +51,7 @@ class PRAT:
             return zip_file_path
         
         except Exception as e:
-            st.error(f"An error occurred: {e} \n"\
+            st.error(f"An error occurred: {e}. \n"\
             "Recheck your input IDs in the text file and\n"\
             "retry.")
 
@@ -129,36 +129,37 @@ class PRAT:
         return domain_info
 
     # Retrieve domain information when the protein IDs/ sequences are given in file
-    def retrieve_domain_info_f(file_name):
+    def retrieve_domain_info_f(file):
 
         domains = {}
 
         # Retrieve domain info of proteins given in a text file as a list of UniProt accs
-        if '.txt' in file_name:
+        if '.txt' in file.name:
 
-            with open(file_name, 'r') as file:
+            prot_accs = file.getvalue().decode("utf-8").split("\n")
+            st.write(prot_accs)
 
-                for uniprot_acc in file:
+            for uniprot_acc in prot_accs:
 
-                    # Obtain domain ID, name and coordinates
-                    # relevant to the given UniProt/Swiss-Prot ID
-                    # from Prosite
+                # Obtain domain ID, name and coordinates
+                # relevant to the given UniProt/Swiss-Prot ID
+                # from Prosite
 
-                    #print(uniprot_acc.strip("\n"))
-                    handle = ScanProsite.scan(seq=uniprot_acc.strip("\n"))
-                    result = ScanProsite.read(handle)
-                    #print(result)
+                #print(uniprot_acc.strip("\n"))
+                handle = ScanProsite.scan(seq=uniprot_acc.strip())
+                result = ScanProsite.read(handle)
+                #print(result)
 
-                    if result:
-                        domain_info = PRAT.scan_domain_info(result)
-                    else:
-                        domain_info = "No domain hits have been found for this protein within the PROSITE server"
+                if result:
+                    domain_info = PRAT.scan_domain_info(result)
+                else:
+                    domain_info = "No domain hits have been found for this protein within the PROSITE server"
 
-                    domains[f'UniProt Acc: {uniprot_acc}'] = domain_info
+                domains[f'UniProt Acc: {uniprot_acc}'] = domain_info
 
         # Retrieve domain info of proteins given in a fasta file
         else:
-            file_handle = open(file_name)
+            file_handle = StringIO(file.getvalue().decode("utf-8"))
             records = SeqIO.parse(file_handle, format = 'fasta')
 
             for record in records:
@@ -192,7 +193,6 @@ class PRAT:
 
                     domain_info = PRAT.scan_domain_info(result)
 
-                    #print('#######################################################################################################')
 
                 if domain_info == '':
                     domain_info += "No domain hits have been found for this protein within the PROSITE server"
@@ -277,14 +277,6 @@ class PRAT:
 
         return domains, zip_file_path
 
-    #retrieve_domain_info_t(protein_seq)
-
-
-    # file_handle = open('../Q12888.fasta')
-    # records = SeqIO.parse(file_handle, format='fasta')
-    #
-    # for record in records:
-    #     print(record)
 
     #----------------------------------------------------------------------------------------------------------------------
 
@@ -394,7 +386,6 @@ class PRAT:
         return zip_file_path
 
 
-    #pdb_seq_extractor("../pdb_id.txt")
     # ----------------------------------------------------------------------------------------------------------------------
 
     # Method to output the no.of chains, and atoms
@@ -469,15 +460,10 @@ class PRAT:
 
         return filepath
 
-    # pdb_chain_extractor_single(filename)
-
-
     # ----------------------------------------------------------------------------------------------------------------------
 
     # Modified Method to output the no.of chains, and atoms
     # for each residue of proteins given in a text file as pdb IDs
-
-    # filename = "../pdb_id.txt"
 
     # Function to extract info from individual chains/ models
     def extract_chain_info(chains, model):
@@ -595,8 +581,6 @@ class PRAT:
 
         return zip_file_path
 
-    # pdb_chain_extractor_multi(filename)
-
     # Method to extract the atomic coordinates of each residue of a given protein in PDB file format
     def pdb_atom_extractor(filename):
 
@@ -656,9 +640,6 @@ class PRAT:
 
 
         return filepath
-
-
-    #pdb_atom_extractor('er/pdb1erf.ent')
 
 
     # Method to extract the hetero residues of a given protein
@@ -735,7 +716,6 @@ class PRAT:
             filepath = os.path.abspath(file_name)
 
         return filepath
-    #pdb_hetero_extractor('er/pdb1erf.ent')
 
 
 
