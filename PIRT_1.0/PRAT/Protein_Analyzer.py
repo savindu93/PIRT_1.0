@@ -621,28 +621,29 @@ class PRAT:
         atom_coords = []
 
 
-        with open(stringio_file, 'r') as file:
+        pdb_file = stringio_file.read().split("\n")
+        #st.write(pdb_file)
 
 
-            for line in file:
+        for line in pdb_file:
 
-                st.write(line)
+            st.write(line)
 
-                if line.startswith('ATOM'):
+            if line.startswith('ATOM'):
 
-                    row_data = line.strip('\n').split()
+                row_data = line.strip('\n').split()
 
-                    pattern = re.compile(r"\d.\d{5}.\d{2}")
-                    col_data = row_data[9]
+                pattern = re.compile(r"\d.\d{5}.\d{2}")
+                col_data = row_data[9]
 
 
-                    if re.match(pattern, col_data):
+                if re.match(pattern, col_data):
 
-                        row_data.append(row_data[10])
-                        row_data[9] = ''.join(list(col_data)[0:4])
-                        row_data[10] = ''.join(list(col_data)[4:])
+                    row_data.append(row_data[10])
+                    row_data[9] = ''.join(list(col_data)[0:4])
+                    row_data[10] = ''.join(list(col_data)[4:])
 
-                    atom_coords.append(row_data[1:12])
+                atom_coords.append(row_data[1:12])
 
         columns = ['Atom No.','Atom Name','Amino Acid','Chain ID','AA No.','X','Y','Z','Occupancy','Temperature Factor','Element Symbol']
         df = pd.DataFrame(atom_coords, columns = columns)
@@ -687,37 +688,36 @@ class PRAT:
         hetero_residue = []
         het_info = []
 
-        
-        with open(stringio_file, 'r') as file:
+        pdb_file = stringio_file.read().split("\n")
 
 
-            for line in file:
+        for line in pdb_file:
 
-                if line.split()[0] == 'HET':
-                    hetero_residue.append(line.strip('\n').split()[1:])
+            if line.split()[0] == 'HET':
+                hetero_residue.append(line.strip('\n').split()[1:])
 
-                elif line.split()[0] == 'HETNAM':
+            elif line.split()[0] == 'HETNAM':
 
-                    hetnam = line.strip('\n').split()[1:]
-                    print(hetnam)
+                hetnam = line.strip('\n').split()[1:]
+                print(hetnam)
 
-                    if len(hetnam) > 2:
-                        if hetnam[0] == '2':
-                            het_name = " ".join(hetnam[2:])
+                if len(hetnam) > 2:
+                    if hetnam[0] == '2':
+                        het_name = " ".join(hetnam[2:])
 
-                            het_info[-1][1:] = []
-                            het_info[-1].append(het_name)
-
-                        else:
-                            het_name = " ".join(hetnam[1:])
-
-                            hetnam[1:] = []
-
-                            hetnam.append(het_name)
-                            het_info.append(hetnam)
+                        het_info[-1][1:] = []
+                        het_info[-1].append(het_name)
 
                     else:
+                        het_name = " ".join(hetnam[1:])
+
+                        hetnam[1:] = []
+
+                        hetnam.append(het_name)
                         het_info.append(hetnam)
+
+                else:
+                    het_info.append(hetnam)
 
         hetero_residue_columns = ['Het ID', 'Chain ID', 'Sequence No.', 'No. of Hetero Residues']
         het_info_columns = ['Het ID', 'Het Name']
