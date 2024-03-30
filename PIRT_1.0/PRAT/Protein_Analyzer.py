@@ -621,7 +621,7 @@ class PRAT:
         atom_coords = []
 
 
-        pdb_file = stringio.read()
+        pdb_file = stringio_file.read()
 
 
         for line in pdb_file:
@@ -685,7 +685,7 @@ class PRAT:
         hetero_residue = []
         het_info = []
 
-        pdb_file = stringio.read()
+        pdb_file = stringio_file.read()
 
 
         for line in pdb_file:
