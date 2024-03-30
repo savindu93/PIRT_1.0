@@ -29,7 +29,7 @@ class PRAT:
 
         for ID in IDs:
             st.write(ID)
-            handle = ExPASy.get_sprot_raw(ID)
+            handle = ExPASy.get_sprot_raw(ID.strip())
             protein_data.append(SwissProt.parse(handle))
 
         filenames = []
