@@ -693,12 +693,12 @@ class PRAT:
 
         for line in pdb_file:
 
-            if line.split()[0] == 'HET':
+            if line.split(" ")[0] == 'HET':
                 hetero_residue.append(line.strip('\n').split()[1:])
 
-            elif line.split()[0] == 'HETNAM':
+            elif line.split(" ")[0] == 'HETNAM':
 
-                hetnam = line.strip('\n').split()[1:]
+                hetnam = line.strip('\n').split(" ")[1:]
                 print(hetnam)
 
                 if len(hetnam) > 2:
