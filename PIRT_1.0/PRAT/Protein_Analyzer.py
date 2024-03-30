@@ -29,7 +29,6 @@ class PRAT:
 
         for ID in IDs:
             st.write(ID)
-            encoded_id = urlencode({'id':ID})
             handle = ExPASy.get_sprot_raw(encoded_id)
             protein_data.append(SwissProt.parse(handle))
 
