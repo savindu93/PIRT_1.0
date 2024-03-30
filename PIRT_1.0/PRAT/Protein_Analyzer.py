@@ -429,12 +429,11 @@ class PRAT:
                     f"Number of chains: {len(chains)}\n\n"
 
         # Extract the information related all the protein chains
+        i = 0 # counter for number of models
+
         for chain in chains:
 
             residues = [value for value in chain.get_residues()]
-
-            print(f"Chain: {chain.get_id()}\n"
-                  f"Number of residues: {len(residues)}")
 
             no_atoms = 0
             atoms = []
@@ -454,8 +453,18 @@ class PRAT:
 
             # Add the information to the data variable that will be printed out
             # to the text file
-            data += f"Chain: {chain.get_id()}\n" \
-                    f"Number of residues: {len(residues)}\n" \
+
+            if no_models > 1:
+
+                i += 1
+                data += f"Chain: {chain.get_id()}\n" \
+                        f"Model: {i}"
+            
+            else:
+
+                data += f"Chain: {chain.get_id()}\n"
+                
+            data += f"Number of residues: {len(residues)}\n" \
                     f"Number of atoms: {no_atoms}\n\n" \
                     f"{df.to_string()}\n\n"
 
