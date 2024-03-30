@@ -7,6 +7,7 @@ import os
 import zipfile
 import base64
 import pandas as pd
+from io import StringIO
 
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -19,7 +20,8 @@ class PRAT:
 
     def retrieve_SP_records(file):
 
-        IDs = file.getvalue().decode("utf-8").read()
+        stringio = StringIO(file.getvalue().decode("utf-8"))
+        IDs = stringio.read()
         protein_data = []
 
         for ID in IDs:
