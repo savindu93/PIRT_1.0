@@ -9,6 +9,7 @@ import base64
 import pandas as pd
 from io import StringIO
 import streamlit as st
+from urllib.parse import urlencode
 
 pd.set_option("display.max_rows", None)
 pd.set_option("display.max_columns", None)
@@ -28,7 +29,8 @@ class PRAT:
 
         for ID in IDs:
             st.write(ID)
-            handle = ExPASy.get_sprot_raw(ID)
+            encoded_id = urlencode({'id':ID})
+            handle = ExPASy.get_sprot_raw(encoded_id)
             protein_data.append(SwissProt.parse(handle))
 
         filenames = []
