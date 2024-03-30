@@ -17,9 +17,9 @@ class PRAT:
     # Method to retrieve a set of SwissProt records with IDs
     # given as a list
 
-    def retrieve_SP_records(filename):
+    def retrieve_SP_records(file):
 
-        IDs = open(filename, 'r')
+        IDs = file.read().decode("utf-8")
         protein_data = []
 
         for ID in IDs:

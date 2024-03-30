@@ -60,7 +60,7 @@ with tab1:
     if file and st.button('Retrieve Data', key='retrieve_sp_records'):
 
         with st.spinner(text = "Retrieving Data"):
-            zip_file_path = PRAT.retrieve_SP_records(file.name)
+            zip_file_path = PRAT.retrieve_SP_records(file)
             #status.update(label = "Retrieved Successfully", state = "complete")
 
         st.markdown(PRAT.file_downloader(zip_file_path), unsafe_allow_html = True)
