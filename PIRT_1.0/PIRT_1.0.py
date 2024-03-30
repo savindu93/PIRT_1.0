@@ -92,8 +92,8 @@ with tab2:
     
     ''')
 
-    file = st.file_uploader("**Upload a text file containing multiple protein IDs"\ 
-                            "or fasta file with the protein sequence**",
+    file = st.file_uploader("**Upload a text file containing multiple protein IDs \
+                            or fasta file with the protein sequence**",
                                 type = ["txt","fasta"])
 
     user_input = st.text_area("**Enter protein ID or Sequence** "
