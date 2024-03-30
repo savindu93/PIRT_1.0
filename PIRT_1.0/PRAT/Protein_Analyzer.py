@@ -627,8 +627,6 @@ class PRAT:
 
         for line in pdb_file:
 
-            st.write(line)
-
             if line.startswith('ATOM'):
 
                 row_data = line.strip('\n').split()
