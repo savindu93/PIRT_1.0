@@ -697,7 +697,7 @@ class PRAT:
             elif line.split(" ")[0] == 'HETNAM':
 
                 hetnam = line.strip('\n').split(" ")[1:]
-                print(hetnam)
+                st.write(hetnam)
 
                 if len(hetnam) > 2:
                     if hetnam[0] == '2':
@@ -728,7 +728,7 @@ class PRAT:
         df_1.set_index(df_1.columns[0], inplace=True)
 
         df_0 = df.to_string()
-        #df_1 = df_1.to_string()
+        df_1 = df_1.to_string()
 
         if df.empty:
 
