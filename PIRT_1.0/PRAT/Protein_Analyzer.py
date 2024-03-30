@@ -21,11 +21,10 @@ class PRAT:
     def retrieve_SP_records(file):
 
         stringio = StringIO(file.getvalue().decode("utf-8"))
-        IDs = stringio.read()
+        IDs = stringio.read().split('\n')
         protein_data = []
 
         for ID in IDs:
-            ID = ID.strip('\n')
             handle = ExPASy.get_sprot_raw(ID)
             protein_data.append(SwissProt.parse(handle))
 
