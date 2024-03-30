@@ -236,7 +236,7 @@ with tab3:
 
             if data != "":
                 
-                st.markdown(data)
+                st.markdown(f":red[{data}]")
 
             else:
             
