@@ -458,7 +458,7 @@ class PRAT:
 
                 i += 1
                 data += f"Chain: {chain.get_id()}\n" \
-                        f"Model: {i}"
+                        f"Model: {i}\n"
             
             else:
 
