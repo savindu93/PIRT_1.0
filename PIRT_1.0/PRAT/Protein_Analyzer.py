@@ -568,6 +568,10 @@ class PRAT:
 
             chains = [value for value in struct.get_chains()]
 
+            # If the protein structure has been determined using any of the 3 exp methods given below then such 
+            # records will have more than one model for a particular protein chain. By setting model as true
+            # only one record out of the multiple models will be printed out.
+            
             if any(method in exp_method for method in ["solution scattering","infrared spectroscopy","solution nmr"]) :
 
                 models = [value for value in struct.get_models()]
