@@ -728,7 +728,7 @@ class PRAT:
         df_1.set_index(df_1.columns[0], inplace=True)
 
         df_0 = df.to_string()
-        df_1 = df_1.to_string()
+        #df_1 = df_1.to_string()
 
         if df.empty:
 
@@ -745,8 +745,8 @@ class PRAT:
                     f"The following file gives information on the hetero-residues of the protein of interest. Information \n" \
                     f"such as the name, number of each hetero residue, the chain and the location of it in the sequence are \n" \
                     f"given.\n\n" \
-                    f"{df_0}\n" \
-                    f"{df_1}\n"
+                    f"{df_0}\n\n" \
+                    f"{df_1}"
 
                 file.write(data)
                 file_name = f'{pdb_id}_hetero_info.txt'
