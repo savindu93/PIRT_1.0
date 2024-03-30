@@ -745,8 +745,8 @@ class PRAT:
                     f"The following file gives information on the hetero-residues of the protein of interest. Information \n" \
                     f"such as the name, number of each hetero residue, the chain and the location of it in the sequence are \n" \
                     f"given.\n\n" \
-                    f"{df_0}\n\n" \
-                    f"\n{df_1}"
+                    f"{df_0}\n" \
+                    f"{df_1}\n"
 
                 file.write(data)
                 file_name = f'{pdb_id}_hetero_info.txt'
