@@ -157,7 +157,7 @@ with tab3:
     if file and st.button('Retrieve Data', key='retrieve_pdb_records'):
 
         with st.spinner(text = "Retrieving Data"):
-            zip_file_path = PRAT.pdb_seq_extractor(file.name)
+            zip_file_path = PRAT.pdb_seq_extractor(file)
 
             st.markdown(PRAT.file_downloader(zip_file_path), unsafe_allow_html = True)
 

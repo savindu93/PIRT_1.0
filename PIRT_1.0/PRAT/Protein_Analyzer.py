@@ -137,7 +137,6 @@ class PRAT:
         if '.txt' in file.name:
 
             prot_accs = file.getvalue().decode("utf-8").split("\n")
-            st.write(prot_accs)
 
             for uniprot_acc in prot_accs:
 
@@ -145,7 +144,6 @@ class PRAT:
                 # relevant to the given UniProt/Swiss-Prot ID
                 # from Prosite
 
-                #print(uniprot_acc.strip("\n"))
                 handle = ScanProsite.scan(seq=uniprot_acc.strip())
                 result = ScanProsite.read(handle)
                 #print(result)
@@ -285,7 +283,7 @@ class PRAT:
     # PDB sequences
 
 
-    def pdb_seq_extractor(filename):
+    def pdb_seq_extractor(file):
 
         # Variable to store the pdb sequences
         # in fasta format
@@ -299,71 +297,71 @@ class PRAT:
         filepaths = []
         seq = ''
 
-        with open(filename, 'r') as handle:
-            for line in handle:
+        IDs = file.getvalue().decode("utf-8").split("\n")
 
-                pdb_id = line.strip("\n")
-                print(pdb_id)
+        for ID in IDs:
 
-                # Download and Read the PDB file
-                from Bio.PDB.PDBList import PDBList
-                pl = PDBList()
-                protein_file = pl.retrieve_pdb_file(pdb_code = pdb_id, file_format = 'pdb')
-                filepaths.append(protein_file)
-                # print(f"Protein file: \n"
-                #       f"{protein_file}")
+            pdb_id = ID.strip("\n")
+            st.write(pdb_id)
 
-                from Bio.PDB.PDBParser import PDBParser
-                parser = PDBParser(PERMISSIVE = 1)
-                struct = parser.get_structure(pdb_id, protein_file)
+            # Download and Read the PDB file
+            from Bio.PDB.PDBList import PDBList
+            pl = PDBList()
+            protein_file = pl.retrieve_pdb_file(pdb_code = pdb_id, file_format = 'pdb')
+            filepaths.append(protein_file)
 
-                # Extract the residues for the protein
-                seq_res = [res.resname for res in struct.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]]
-                seq += f'\n>{struct.get_full_id()[0]}\n'
 
-                for res in seq_res:
+            from Bio.PDB.PDBParser import PDBParser
+            parser = PDBParser(PERMISSIVE = 1)
+            struct = parser.get_structure(pdb_id, protein_file)
 
-                    seq += [aa for aat,aa in amino_acid_dict.items() if aat.lower() == res.lower()][0]
+            # Extract the residues for the protein
+            seq_res = [res.resname for res in struct.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]]
+            seq += f'\n>{struct.get_full_id()[0]}\n'
 
-                #print(seq)
-                seq += '\n'
+            for res in seq_res:
 
-                # Extract residues for each chain in the protein
-                chains = [value for value in struct.get_chains()]
+                seq += [aa for aat,aa in amino_acid_dict.items() if aat.lower() == res.lower()][0]
 
-                i = 0
-                chain_info = ""
-                chain_ids = []
+            #print(seq)
+            seq += '\n'
 
-                for chain in chains:
+            # Extract residues for each chain in the protein
+            chains = [value for value in struct.get_chains()]
 
-                    if chain.get_id() in chain_ids:
-                        break
-                    else:
-                        chain_ids.append(chain.get_id())
+            i = 0
+            chain_info = ""
+            chain_ids = []
 
-                    chain_seq = ""
-                    chain_res = [res.resname.lower() for res in chain.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]]
-                    #print(chain_res)
+            for chain in chains:
 
-                    for res in chain_res:
+                if chain.get_id() in chain_ids:
+                    break
+                else:
+                    chain_ids.append(chain.get_id())
 
-                        chain_seq += [aa for aat,aa in amino_acid_dict.items() if aat.lower() == res][0]
+                chain_seq = ""
+                chain_res = [res.resname.lower() for res in chain.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]]
+                #print(chain_res)
 
-                    chain_info += f"\n>{chain.get_full_id()[0]}| Chain: {chain.get_id()}\n " \
-                                  f"{chain_seq}\n"
+                for res in chain_res:
 
-                    # print(f"\n>{chain.get_full_id()[0]}| Chain: {chain.get_id()}\n "
-                    #       f"{chain_seq}\n")
+                    chain_seq += [aa for aat,aa in amino_acid_dict.items() if aat.lower() == res][0]
 
-                    i += 1
+                chain_info += f"\n>{chain.get_full_id()[0]}| Chain: {chain.get_id()}\n " \
+                                f"{chain_seq}\n"
 
-                # Output the chain sequences for a specific protein into a file
-                # (seperate files for each protein)
-                with open(f"{struct.get_full_id()[0]}_chain_seq.txt", 'w') as file:
+                # print(f"\n>{chain.get_full_id()[0]}| Chain: {chain.get_id()}\n "
+                #       f"{chain_seq}\n")
 
-                    file.write(chain_info)
-                    filenames.append(f"{struct.get_full_id()[0]}_chain_seq.txt")
+                i += 1
+
+            # Output the chain sequences for a specific protein into a file
+            # (seperate files for each protein)
+            with open(f"{struct.get_full_id()[0]}_chain_seq.txt", 'w') as file:
+
+                file.write(chain_info)
+                filenames.append(f"{struct.get_full_id()[0]}_chain_seq.txt")
 
 
         # Write the pdb sequences into an output fasta file
