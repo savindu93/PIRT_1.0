@@ -229,15 +229,21 @@ with tab3:
 
         with st.spinner(text = "Retrieving Data"):
             filepath = PRAT.pdb_atom_extractor(file)
-            filepath_1, error = PRAT.pdb_hetero_extractor(file)
-
+            data = PRAT.pdb_hetero_extractor(file)
 
             st.markdown(f"Atomic Info: {PRAT.file_downloader(filepath)}", unsafe_allow_html = True)
-            st.markdown(f"Hetero-residue Info: {PRAT.file_downloader(filepath_1)}", unsafe_allow_html = True)
 
+            
             if error != "":
                 
-                st.error(error)
+                st.error(data)
+
+            else:
+            
+                
+                st.markdown(f"Hetero-residue Info: {PRAT.file_downloader(data)}", unsafe_allow_html = True)
+
+
 
 
 

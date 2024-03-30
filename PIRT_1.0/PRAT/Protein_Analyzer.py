@@ -734,6 +734,8 @@ class PRAT:
 
             error = "No hetero-residues were found for the specifiec protein"
 
+            return error
+
         else:
 
             with open(f'{pdb_id}_hetero_info.txt', 'w') as file:
@@ -753,7 +755,8 @@ class PRAT:
                 # Create filepath for the above newly formed file
                 filepath = os.path.abspath(file_name)
 
-        return filepath, error
+            return filepath
+
 
 
 
