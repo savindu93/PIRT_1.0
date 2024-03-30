@@ -301,7 +301,7 @@ class PRAT:
 
         for ID in IDs:
 
-            pdb_id = ID.strip("\n")
+            pdb_id = ID.strip()
             st.write(pdb_id)
 
             # Download and Read the PDB file
