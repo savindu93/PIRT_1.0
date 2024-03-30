@@ -234,13 +234,12 @@ with tab3:
             st.markdown(f"Atomic Info: {PRAT.file_downloader(filepath)}", unsafe_allow_html = True)
 
 
-            if data != "":
+            if !os.path.exists(data):
                 
                 st.markdown(f":red[{data}]")
 
             else:
             
-                
                 st.markdown(f"Hetero-residue Info: {PRAT.file_downloader(data)}", unsafe_allow_html = True)
 
 
