@@ -11,16 +11,18 @@ with st.sidebar:
     protein IDs or sequences. It can retrieve information such as the sequences, domains, chains 
     and atoms of the proteins specified.
     
-    #### 3rd party packages used
-    [Biopython](https://biopython.org/)\n
+    #### 3rd party packages used  
+    [Biopython](https://biopython.org/)  
     [Beautiful Soup](https://beautiful-soup-4.readthedocs.io/en/latest/)
     
-    #### Image credits:
+    #### Image credits:  
     [3D Illustration of Protein](https://3dproteinimaging.com/wp-content/uploads/2020/08/protein-imager-molecular-illustration-1TOX.jpeg)
     
     :orange[**You can find me at,**] \n
-    LinkedIn: [Savindu Weerathunga](https://www.linkedin.com/in/savinduweerathunga/)\n
-    Twitter: [@savindul_w](https://twitter.com/savindul_w)\n
+    LinkedIn: [Savindu Weerathunga](https://www.linkedin.com/in/savinduweerathunga/)  
+    Twitter: [@savindul_w](https://twitter.com/savindul_w)  
+    Source Code: [PIRT 1.0 GitHub Repo](https://github.com/savindu93/PIRT_1.0)
+    
     
     ''', unsafe_allow_html = True)
 
