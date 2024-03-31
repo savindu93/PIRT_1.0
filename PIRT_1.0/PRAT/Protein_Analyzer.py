@@ -26,6 +26,7 @@ class PRAT:
             IDs = file.getvalue().decode("utf-8").split("\n")
             protein_data = []
 
+            # Retrieve raw data from ExPASy Swiss-Prot servers
             for ID in IDs:
                 handle = ExPASy.get_sprot_raw(ID.strip())
                 protein_data.append(SwissProt.parse(handle))
@@ -55,6 +56,7 @@ class PRAT:
             "Recheck your input IDs in the text file and\n"\
             "retry.")
 
+    # Method to create the download link for a set of files
     def file_downloader(filepath):
 
         with open(filepath, 'rb') as f:
@@ -89,7 +91,7 @@ class PRAT:
             # from Prosite documentation
             import requests
             response = requests.get("https://prosite.expasy.org/" + domain_id)
-            # print(response.text)
+            
 
             from bs4 import BeautifulSoup
             prosite_DOC_Id = "(PDOC[0-9]{5})"
@@ -97,7 +99,7 @@ class PRAT:
             soap = BeautifulSoup(response.content, 'html.parser')
             ps_general_info = soap.find('table', class_="type-1").get_text()
             prosite_ID = pattern.findall(ps_general_info)
-            # print(prosite_ID)
+            
 
             domain_name = soap.find_all('td', attrs={'property': 'schema:description'})
             domain = ''
@@ -105,17 +107,10 @@ class PRAT:
                 domain = names.text.strip('\n\t').replace('domain profile.', '')
 
             response = requests.get("https://prosite.expasy.org/" + prosite_ID[0])
-            # print(response.text)
+            
             soap = BeautifulSoup(response.content, 'html.parser')
             spans = soap.find_all('span', attrs={'property': 'schema:description'})
 
-            # print(f"Domain: {i + 1}\n" \
-            #       f"Domain Name: {domain}\n"
-            #       f"Domain ID: {domain_id}\n"
-            #       f"Domain Coordinates: {domain_coords}\n")
-            #
-            # for span in spans:
-            #     print(span.text)
 
             domain_info += f"{'*' * 50}\n" \
                            f"Domain: {i} |\n" \
@@ -128,7 +123,7 @@ class PRAT:
 
         return domain_info
 
-    # Retrieve domain information when the protein IDs/ sequences are given in file
+    # Retrieve domain information when the protein IDs/ sequences are given in a text/ fasta file respectively 
     def retrieve_domain_info_f(file):
 
         domains = {}
@@ -146,7 +141,7 @@ class PRAT:
 
                 handle = ScanProsite.scan(seq=uniprot_acc.strip())
                 result = ScanProsite.read(handle)
-                #print(result)
+                
 
                 if result:
                     domain_info = PRAT.scan_domain_info(result)
@@ -155,7 +150,7 @@ class PRAT:
 
                 domains[f'UniProt Acc: {uniprot_acc}'] = domain_info
 
-        # Retrieve domain info of proteins given in a fasta file
+        # Retrieve domain info of proteins given as sequences in a fasta file
         else:
             file_handle = StringIO(file.getvalue().decode("utf-8"))
             records = SeqIO.parse(file_handle, format = 'fasta')
@@ -285,9 +280,6 @@ class PRAT:
 
     def pdb_seq_extractor(file):
 
-        # Variable to store the pdb sequences
-        # in fasta format
-
         amino_acid_dict = {'Ala': 'A', 'Arg': 'R', 'Asn': 'N', 'Asp': 'D', 'Asx': 'B', 'Cys': 'C', 'Gln': 'Q',
                            'Glu': 'E', 'Glx': 'Z', 'Gly': 'G', 'His': 'H', 'Ile': 'I', 'Leu': 'L', 'Lys': 'K',
                            'Met': 'M', 'Phe': 'F', 'Pro': 'P', 'Ser': 'S', 'Thr': 'T', 'Trp': 'W', 'Tyr': 'Y',
@@ -295,6 +287,9 @@ class PRAT:
 
         filenames = []
         filepaths = []
+
+        # Variable to store the pdb sequences
+        # in fasta format
         seq = ''
 
         IDs = file.getvalue().decode("utf-8").split("\n")
@@ -345,7 +340,7 @@ class PRAT:
 
                 chain_seq = ""
                 chain_res = [res.resname.lower() for res in chain.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]]
-                #print(chain_res)
+
 
                 for res in chain_res:
 
@@ -354,8 +349,6 @@ class PRAT:
                 chain_info += f"\n>{chain.get_full_id()[0]}| Chain: {chain.get_id()}\n " \
                                 f"{chain_seq}\n"
 
-                # print(f"\n>{chain.get_full_id()[0]}| Chain: {chain.get_id()}\n "
-                #       f"{chain_seq}\n")
 
                 i += 1
 
@@ -414,8 +407,6 @@ class PRAT:
 
         print(f"Number of chains: {len(chains)}\n")
 
-        # Variable that includes all the data that will be printed out
-        # to the external text file
 
         if no_models > 1:
 
