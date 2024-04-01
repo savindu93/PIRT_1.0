@@ -320,16 +320,27 @@ class PRAT:
 
             models = [model for model in struct.get_models()]
 
-            for res in [res for res in struct.get_residues()]:
-            
-                st.write([model for model in res.get_models()])
-
-
             # Extract the residues for the protein
-            seq_res = [res.resname for res in struct.get_residues() if (res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()])\
-                       and [model for model in res.get_models()][0] == models[0]] # Only amino acid residues are included, hetero residues are removed 
+            if len(models) > 1:
+
+                chains = [value for value in struct.get_chains()]
+
+                i = 0
+                for chain in chain:
+                    
+                    i += 1
+                    seq_res = [res.resname.lower() for res in chain.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]]
+
+                    if i == 1:
+                        break
+
+            else:
+
+                seq_res = [res.resname for res in struct.get_residues() if (res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()])] 
+                # Only amino acid residues are included, hetero residues are removed 
             
             seq += f'\n>{struct.get_full_id()[0]}\n'
+
 
             for res in seq_res:
 
