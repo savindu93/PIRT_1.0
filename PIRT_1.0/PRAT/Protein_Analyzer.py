@@ -299,6 +299,7 @@ class PRAT:
 
         # Variable to store the pdb sequences
         # in fasta format
+        
         seq = ''
 
         IDs = file.getvalue().decode("utf-8").split("\n")
