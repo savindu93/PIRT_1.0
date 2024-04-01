@@ -326,7 +326,7 @@ class PRAT:
                 chains = [value for value in struct.get_chains()]
 
                 i = 0
-                for chain in chain:
+                for chain in chains:
                     
                     i += 1
                     seq_res = [res.resname.lower() for res in chain.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]]
