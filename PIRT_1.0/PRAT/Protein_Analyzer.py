@@ -368,7 +368,6 @@ class PRAT:
                 file.write(chain_info)
                 filenames.append(f"{struct.get_full_id()[0]}_chain_seq.txt")
 
-        st.write(seq)
 
         # Write the pdb sequences into an output fasta file
         # (single file for all pdb sequences)
