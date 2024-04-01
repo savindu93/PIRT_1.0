@@ -333,6 +333,7 @@ class PRAT:
 
             seq += '\n'
 
+
             # Extract residues for each chain in the protein
             chains = [value for value in struct.get_chains()]
 
@@ -368,7 +369,8 @@ class PRAT:
                 file.write(chain_info)
                 filenames.append(f"{struct.get_full_id()[0]}_chain_seq.txt")
 
-
+        st.write(seq)
+        
         # Write the pdb sequences into an output fasta file
         # (single file for all pdb sequences)
         with open('pdb_seq.fasta', 'w') as file:
