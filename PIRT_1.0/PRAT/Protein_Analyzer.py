@@ -218,7 +218,8 @@ class PRAT:
         domains = {}
         i = 0
 
-        uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})"
+        
+        uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})" # Cited from UniProt
         pattern = re.compile(uniprot_id)
         match = pattern.findall(text)
 
@@ -228,6 +229,7 @@ class PRAT:
             inputs = text.split("\n\n")
 
         for input in inputs:
+            st.write(input)
 
             i += 1
             # Obtain domain ID, name and coordinates
