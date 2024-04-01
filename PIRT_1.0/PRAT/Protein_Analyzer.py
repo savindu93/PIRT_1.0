@@ -323,7 +323,7 @@ class PRAT:
 
             # Extract the residues for the protein
             seq_res = [res.resname for res in struct.get_residues() if (res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()])\
-                       and [model for model in res.get_models()] == models[0]] # Only amino acid residues are included, hetero residues are removed 
+                       and [model for model in res.get_models()][0] == models[0]] # Only amino acid residues are included, hetero residues are removed 
             
             seq += f'\n>{struct.get_full_id()[0]}\n'
 
