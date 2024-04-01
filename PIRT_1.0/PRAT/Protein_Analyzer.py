@@ -319,11 +319,11 @@ class PRAT:
             struct = parser.get_structure(pdb_id, protein_file)
 
             models = [model for model in struct.get_models()]
-            st.write(models)
 
 
             # Extract the residues for the protein
-            seq_res = [res.resname for res in struct.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]] # Only amino acid residues of the 1st model are included, hetero residues are removed 
+            seq_res = [res.resname for res in struct.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]\
+                       and models < 2] # Only amino acid residues of the 1st model are included, hetero residues are removed 
             
             seq += f'\n>{struct.get_full_id()[0]}\n'
 
