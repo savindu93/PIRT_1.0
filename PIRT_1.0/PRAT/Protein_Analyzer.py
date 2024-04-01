@@ -215,62 +215,69 @@ class PRAT:
     # Retrieve domain information when the protein IDs/ sequences are given as text input
     def retrieve_domain_info_t(text):
 
-        domains = {}
-        i = 0
+        try:
 
-        
-        uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})" # Cited from UniProt
-        pattern = re.compile(uniprot_id)
-        match = pattern.findall(text)
+            domains = {}
+            i = 0
 
-        if match:
-            inputs = text.split("\n")
-        else:
-            inputs = text.split("\n\n")
-
-        for input in inputs:
-            st.write(input)
-
-            i += 1
-            # Obtain domain ID, name and coordinates
-            # relevant to the given UniProt/Swiss-Prot ID
-            # from Prosite
-
-            handle = ScanProsite.scan(seq=input)
-            result = ScanProsite.read(handle)
-
-            if result:
-                domain_info = PRAT.scan_domain_info(result)
-
-            else:
-                domain_info = "No domain hits have been found for this protein within the PROSITE server"
-
-            uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})"
+            
+            uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})" # Cited from UniProt
             pattern = re.compile(uniprot_id)
-            match = pattern.findall(input)
+            match = pattern.findall(text)
 
             if match:
-                domains[f'Protein: {match[0][0]}'] = domain_info
+                inputs = text.split("\n")
             else:
-                domains[f'Protein: {i}'] = domain_info
+                inputs = text.split("\n\n")
 
-        # Create files to download them together in a zipped file
-        filenames = []
-        for protein, domain_info in domains.items():
-            filename = f"{protein.split('|')[0]}_Domains"
-            filenames.append(filename)
+            for input in inputs:
+                
 
-            with open(filename, 'w', encoding='utf-8') as file:
-                file.write(domain_info)
+                i += 1
+                # Obtain domain ID, name and coordinates
+                # relevant to the given UniProt/Swiss-Prot ID
+                # from Prosite
 
-        filepaths = [os.path.abspath(filename) for filename in filenames]
+                handle = ScanProsite.scan(seq=input)
+                result = ScanProsite.read(handle)
 
-        zip_file_path = "domain_files.zip"
-        with zipfile.ZipFile(zip_file_path, "w") as zipf:
-            for filepath in filepaths:
-                zipf.write(filepath, os.path.basename(filepath))
+                if result:
+                    domain_info = PRAT.scan_domain_info(result)
 
-        return domains, zip_file_path
+                else:
+                    domain_info = "No domain hits have been found for this protein within the PROSITE server"
+
+                uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})"
+                pattern = re.compile(uniprot_id)
+                match = pattern.findall(input)
+
+                if match:
+                    domains[f'Protein: {match[0][0]}'] = domain_info
+                else:
+                    domains[f'Protein: {i}'] = domain_info
+
+            # Create files to download them together in a zipped file
+            filenames = []
+            for protein, domain_info in domains.items():
+                filename = f"{protein.split('|')[0]}_Domains"
+                filenames.append(filename)
+
+                with open(filename, 'w', encoding='utf-8') as file:
+                    file.write(domain_info)
+
+            filepaths = [os.path.abspath(filename) for filename in filenames]
+
+            zip_file_path = "domain_files.zip"
+            with zipfile.ZipFile(zip_file_path, "w") as zipf:
+                for filepath in filepaths:
+                    zipf.write(filepath, os.path.basename(filepath))
+
+            return domains, zip_file_path
+        
+        except Exception as e:
+
+            st.error(f"An error occurred: {e}. \n"\
+            "Recheck your text for any leading newlines after the last ID.") 
 
 
     #----------------------------------------------------------------------------------------------------------------------
