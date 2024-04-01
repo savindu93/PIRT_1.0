@@ -323,7 +323,7 @@ class PRAT:
 
             # Extract the residues for the protein
             seq_res = [res.resname for res in struct.get_residues() if res.resname.lower() in [aat.lower() for aat in amino_acid_dict.keys()]\
-                       and res.parent.id == 'A'] # Only amino acid residues of the 1st model are included, hetero residues are removed 
+                       and model[0]] # Only amino acid residues of the 1st model are included, hetero residues are removed 
             
             seq += f'\n>{struct.get_full_id()[0]}\n'
 
@@ -370,7 +370,7 @@ class PRAT:
                 filenames.append(f"{struct.get_full_id()[0]}_chain_seq.txt")
 
         st.write(seq)
-        
+
         # Write the pdb sequences into an output fasta file
         # (single file for all pdb sequences)
         with open('pdb_seq.fasta', 'w') as file:
