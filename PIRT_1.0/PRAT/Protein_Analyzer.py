@@ -319,7 +319,7 @@ class PRAT:
             struct = parser.get_structure(pdb_id, protein_file)
 
             models = [model for model in struct.get_models()]
-            st.write(len(models))
+            st.write(models)
 
 
             # Extract the residues for the protein
