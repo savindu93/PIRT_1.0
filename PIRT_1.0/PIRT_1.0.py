@@ -138,7 +138,7 @@ with tab2:
 with tab3:
 
     # 1/ Retrieving PDB records/ Chain Sequences
-    st.subheader('Retrieve PDB records and Chain Sequences')
+    st.subheader('Retrieve PDB records and Sequences')
     st.markdown(f'''
 
     The following tool retrieves data related to a single or multiple proteins from the
