@@ -131,6 +131,7 @@ class PRAT:
     def retrieve_domain_info_f(file):
         
         try:
+            
             domains = {}
     
             # Retrieve domain info of proteins given in a text file as a list of UniProt accs
@@ -223,7 +224,7 @@ class PRAT:
          except Exception as e:
             st.error(f"An error occurred: {e}. \n"\
             "Recheck your input IDs in the text file and\n"\
-            "retry. Make sure the protein IDs are UniProt IDs.")
+            "retry.")
 
     # Retrieve domain information when the protein IDs/ sequences are given as text input
     def retrieve_domain_info_t(text):
