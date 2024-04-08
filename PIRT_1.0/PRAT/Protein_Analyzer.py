@@ -129,95 +129,100 @@ class PRAT:
 
     # Retrieve domain information when the protein IDs/ sequences are given in a text/ fasta file respectively 
     def retrieve_domain_info_f(file):
-
-        domains = {}
-
-        # Retrieve domain info of proteins given in a text file as a list of UniProt accs
-        if '.txt' in file.name:
-
-            prot_accs = file.getvalue().decode("utf-8").split("\n")
-
-            for uniprot_acc in prot_accs:
-
-                if uniprot_acc == " ":
-                    continue
-
-                # Obtain domain ID, name and coordinates
-                # relevant to the given UniProt/Swiss-Prot ID
-                # from Prosite
-
-                handle = ScanProsite.scan(seq=uniprot_acc.strip())
-                result = ScanProsite.read(handle)
-                
-
-                if result:
-                    domain_info = PRAT.scan_domain_info(result)
-                else:
-                    domain_info = "No domain hits have been found for this protein within the PROSITE server"
-
-                domains[f'UniProt Acc: {uniprot_acc}'] = domain_info
-
-        # Retrieve domain info of proteins given as sequences in a fasta file
-        else:
-            file_handle = StringIO(file.getvalue().decode("utf-8"))
-            records = SeqIO.parse(file_handle, format = 'fasta')
-
-            for record in records:
-
-                sequence = record.seq
-
-                # The regular expression pattern to identify a
-                # standard UniProt ID (* cited from UniProt)
-                uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})"
-                pattern = re.compile(uniprot_id)
-                match = pattern.findall(record.id)
-
-                uniprot_acc = match[0][0]
-
-                if match == []:
-                    # If the protein UniProt ID is not given
-                    # find domain info using sequence
-
-                    handle = ScanProsite.scan(seq = sequence)
-                    result = ScanProsite.read(handle)
-
-                    domain_info = PRAT.scan_domain_info(result)
-
-                else:
+        try:
+            domains = {}
+    
+            # Retrieve domain info of proteins given in a text file as a list of UniProt accs
+            if '.txt' in file.name:
+    
+                prot_accs = file.getvalue().decode("utf-8").split("\n")
+    
+                for uniprot_acc in prot_accs:
+    
+                    if uniprot_acc == "":
+                        continue
+    
                     # Obtain domain ID, name and coordinates
                     # relevant to the given UniProt/Swiss-Prot ID
                     # from Prosite
-
-                    handle = ScanProsite.scan(seq = uniprot_acc)
+    
+                    handle = ScanProsite.scan(seq=uniprot_acc.strip())
                     result = ScanProsite.read(handle)
+                    
+    
+                    if result:
+                        domain_info = PRAT.scan_domain_info(result)
+                    else:
+                        domain_info = "No domain hits have been found for this protein within the PROSITE server"
+    
+                    domains[f'UniProt Acc: {uniprot_acc}'] = domain_info
+    
+            # Retrieve domain info of proteins given as sequences in a fasta file
+            else:
+                file_handle = StringIO(file.getvalue().decode("utf-8"))
+                records = SeqIO.parse(file_handle, format = 'fasta')
+    
+                for record in records:
+    
+                    sequence = record.seq
+    
+                    # The regular expression pattern to identify a
+                    # standard UniProt ID (* cited from UniProt)
+                    uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})"
+                    pattern = re.compile(uniprot_id)
+                    match = pattern.findall(record.id)
+    
+                    uniprot_acc = match[0][0]
+    
+                    if match == []:
+                        # If the protein UniProt ID is not given
+                        # find domain info using sequence
+    
+                        handle = ScanProsite.scan(seq = sequence)
+                        result = ScanProsite.read(handle)
+    
+                        domain_info = PRAT.scan_domain_info(result)
+    
+                    else:
+                        # Obtain domain ID, name and coordinates
+                        # relevant to the given UniProt/Swiss-Prot ID
+                        # from Prosite
+    
+                        handle = ScanProsite.scan(seq = uniprot_acc)
+                        result = ScanProsite.read(handle)
+    
+                        domain_info = PRAT.scan_domain_info(result)
+    
+    
+                    if domain_info == '':
+                        domain_info += "No domain hits have been found for this protein within the PROSITE server"
+    
+    
+                    domains[f'UniProt Acc: {uniprot_acc} | Protein Name: {record.name}'] = domain_info
+    
+            # Create files to download them together in a zipped file
+            filenames = []
+            for protein, domain_info in domains.items():
+    
+                filename = f"{protein.split('|')[0]}_Domains"
+                filenames.append(filename)
+    
+                with open(filename, 'w', encoding = 'utf-8') as file:
+                    file.write(domain_info)
+    
+            filepaths = [os.path.abspath(filename) for filename in filenames]
+    
+            zip_file_path = "domain_files.zip"
+            with zipfile.ZipFile(zip_file_path, "w") as zipf:
+                for filepath in filepaths:
+                    zipf.write(filepath, os.path.basename(filepath))
+    
+            return domains, zip_file_path
 
-                    domain_info = PRAT.scan_domain_info(result)
-
-
-                if domain_info == '':
-                    domain_info += "No domain hits have been found for this protein within the PROSITE server"
-
-
-                domains[f'UniProt Acc: {uniprot_acc} | Protein Name: {record.name}'] = domain_info
-
-        # Create files to download them together in a zipped file
-        filenames = []
-        for protein, domain_info in domains.items():
-
-            filename = f"{protein.split('|')[0]}_Domains"
-            filenames.append(filename)
-
-            with open(filename, 'w', encoding = 'utf-8') as file:
-                file.write(domain_info)
-
-        filepaths = [os.path.abspath(filename) for filename in filenames]
-
-        zip_file_path = "domain_files.zip"
-        with zipfile.ZipFile(zip_file_path, "w") as zipf:
-            for filepath in filepaths:
-                zipf.write(filepath, os.path.basename(filepath))
-
-        return domains, zip_file_path
+         except Exception as e:
+            st.error(f"An error occurred: {e}. \n"\
+            "Recheck your input IDs in the text file and\n"\
+            "retry. Make sure the protein IDs are UniProt IDs.")
 
     # Retrieve domain information when the protein IDs/ sequences are given as text input
     def retrieve_domain_info_t(text):
