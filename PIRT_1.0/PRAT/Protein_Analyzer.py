@@ -29,7 +29,8 @@ class PRAT:
             # Retrieve raw data from ExPASy Swiss-Prot servers
             for ID in IDs:
 
-                st.write("*" + ID)
+                st.write("*")
+                st.write(ID)
 
                 if ID == "":
                     continue
