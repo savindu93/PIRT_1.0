@@ -29,7 +29,7 @@ class PRAT:
             # Retrieve raw data from ExPASy Swiss-Prot servers
             for ID in IDs:
 
-                if ID == " ":
+                if ID == "":
                     continue
 
                 handle = ExPASy.get_sprot_raw(ID.strip())
