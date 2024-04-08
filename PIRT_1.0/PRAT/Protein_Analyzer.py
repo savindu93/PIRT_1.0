@@ -139,7 +139,7 @@ class PRAT:
 
             for uniprot_acc in prot_accs:
 
-                if uniprot_acc == "":
+                if uniprot_acc == " ":
                     continue
 
                 # Obtain domain ID, name and coordinates
