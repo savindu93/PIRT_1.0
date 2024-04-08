@@ -143,7 +143,11 @@ class PRAT:
 
             for uniprot_acc in prot_accs:
 
-                if uniprot_acc == "":
+                uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})"
+                pattern = re.compile(uniprot_id)
+                match = pattern.findall(ID)
+
+                if not match:
                     continue
 
                 # Obtain domain ID, name and coordinates
@@ -313,9 +317,11 @@ class PRAT:
         IDs = file.getvalue().decode("utf-8").split("\n")
 
         for ID in IDs:
+
+            pattern = re.compile("(\w{4})")
+            match = pattern.findall(ID)
             
-            
-            if ID == "":
+            if not match:
                 continue
 
             pdb_id = ID.strip()
@@ -575,7 +581,10 @@ class PRAT:
 
         for ID in IDs:
 
-            if ID == "":
+            pattern = re.compile("(\w{4})")
+            match = pattern.findall(ID)
+            
+            if not match:
                 continue
 
             pdb_id = ID.strip()
