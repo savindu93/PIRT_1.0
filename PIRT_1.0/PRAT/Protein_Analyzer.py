@@ -129,6 +129,7 @@ class PRAT:
 
     # Retrieve domain information when the protein IDs/ sequences are given in a text/ fasta file respectively 
     def retrieve_domain_info_f(file):
+        
         try:
             domains = {}
     
