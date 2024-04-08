@@ -36,7 +36,7 @@ with col[0]:
     """)
 
 with col[1]:
-    st.image('protein-illustration-1TOX.png')
+    st.image('PIRT_1.0/protein-illustration-1TOX.png')
 
 tab1, tab2, tab3 = st.tabs(['Retrieve from Swiss-Prot',
                             'Retrieve from Prosite',
