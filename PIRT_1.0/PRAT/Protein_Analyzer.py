@@ -29,10 +29,11 @@ class PRAT:
             # Retrieve raw data from ExPASy Swiss-Prot servers
             for ID in IDs:
 
-                st.write("--")
-                st.write(ID)
+                uniprot_id = "([OPQ][0-9][A-Z0-9]{3}[0-9])|([A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})"
+                pattern = re.compile(uniprot_id)
+                match = pattern.findall(ID)
 
-                if ID == "":
+                if not match:
                     continue
 
                 handle = ExPASy.get_sprot_raw(ID.strip())
