@@ -310,7 +310,7 @@ class PRAT:
 
         for ID in IDs:
 
-            if ID == "":
+            if ID == " ":
                 continue
 
             pdb_id = ID.strip()
