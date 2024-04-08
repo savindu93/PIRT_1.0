@@ -309,7 +309,8 @@ class PRAT:
         IDs = file.getvalue().decode("utf-8").split("\n")
 
         for ID in IDs:
-
+            
+            st.write("*" + ID)
             if ID == "":
                 continue
 
